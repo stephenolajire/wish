@@ -1,184 +1,183 @@
-import React, { useState, useEffect } from "react";
-import {
-  Star,
-  Trophy,
-  GraduationCap,
-  Sparkles,
-  Heart,
-  Award,
-} from "lucide-react";
-import styles from "./GraduationCelebration.module.css";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Heart, Star, Sparkles, Gift, Flower2 } from "lucide-react";
 
-const GraduationCelebration = () => {
-  const [currentMessage, setCurrentMessage] = useState(0);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [particles, setParticles] = useState([]);
+export default function BirthdayTribute() {
+  const [flowers, setFlowers] = useState([]);
 
-  const congratulatoryMessages = [
-    "🎓 Congratulations Gratitude! 🎓",
-    "You did it! Your hard work paid off! 💪",
-    "Welcome to the next chapter of your journey! 📚",
-    "Your dedication has led to this amazing achievement! ⭐",
-    "So proud of your academic success! 🌟",
-    "The future is bright for you, graduate! ✨",
-    "Your perseverance has brought you here! 🏆",
-    "Cheers to your educational milestone! 🎉",
-    "You've earned every bit of this celebration! 🎊",
-    "Here's to new beginnings and endless possibilities! 🚀",
-  ];
-
-  // Generate confetti particles
-  useEffect(() => {
-    const generateParticles = () => {
-      const newParticles = [];
-      for (let i = 0; i < 50; i++) {
-        newParticles.push({
-          id: i,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          delay: Math.random() * 3,
-          duration: 3 + Math.random() * 2,
-          color: [
-            "#FFD700",
-            "#FF6B6B",
-            "#4ECDC4",
-            "#45B7D1",
-            "#96CEB4",
-            "#FFEAA7",
-          ][Math.floor(Math.random() * 6)],
-        });
-      }
-      setParticles(newParticles);
-    };
-
-    generateParticles();
-    setShowConfetti(true);
-  }, []);
-
-  // Cycle through messages
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMessage((prev) => (prev + 1) % congratulatoryMessages.length);
+  const celebrate = () => {
+    const newFlowers = Array.from({ length: 25 }, (_, i) => ({
+      id: Date.now() + i,
+      left: Math.random() * 100,
+      rotation: Math.random() * 360,
+    }));
+    setFlowers((prev) => [...prev, ...newFlowers]);
+    setTimeout(() => {
+      setFlowers((prev) =>
+        prev.filter((f) => !newFlowers.find((nf) => nf.id === f.id))
+      );
     }, 3000);
-
-    return () => clearInterval(interval);
-  }, [congratulatoryMessages.length]);
-
-  const handleCelebrationClick = () => {
-    setShowConfetti(!showConfetti);
-    // Regenerate particles for more celebration
-    const newParticles = [];
-    for (let i = 0; i < 100; i++) {
-      newParticles.push({
-        id: Date.now() + i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        delay: Math.random() * 2,
-        duration: 2 + Math.random() * 3,
-        color: [
-          "#FFD700",
-          "#FF6B6B",
-          "#4ECDC4",
-          "#45B7D1",
-          "#96CEB4",
-          "#FFEAA7",
-        ][Math.floor(Math.random() * 6)],
-      });
-    }
-    setParticles((prev) => [...prev, ...newParticles]);
   };
 
   return (
-    <div className={styles.container}>
-      {/* Animated Background Elements */}
-      <div className={styles.backgroundParticles}>
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className={styles.particle}
-            style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              backgroundColor: particle.color,
-              animationDuration: `${particle.duration}s`,
-              animationDelay: `${particle.delay}s`,
-            }}
-          />
-        ))}
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-100 relative overflow-hidden">
+      {/* Celebration flowers */}
+      {flowers.map((flower) => (
+        <motion.div
+          key={flower.id}
+          className="absolute text-pink-500 z-50"
+          initial={{ top: "50%", left: `${flower.left}%`, opacity: 1 }}
+          animate={{
+            y: [0, -200],
+            rotate: flower.rotation,
+            opacity: [1, 0],
+          }}
+          transition={{ duration: 2.5, ease: "easeOut" }}
+        >
+          <Flower2 size={32} fill="currentColor" />
+        </motion.div>
+      ))}
 
-      {/* Floating Icons */}
-      <div className={`${styles.floatingIcon} ${styles.topLeft}`}>
-        <GraduationCap className={styles.iconLarge} />
-      </div>
-      <div className={`${styles.floatingIcon} ${styles.topRight}`}>
-        <Trophy className={styles.iconMedium} />
-      </div>
-      <div className={`${styles.floatingIcon} ${styles.bottomLeft}`}>
-        <Star className={styles.iconSmall} />
-      </div>
-      <div className={`${styles.floatingIcon} ${styles.bottomRight}`}>
-        <Award className={styles.iconMedium} />
-      </div>
+      <div className="max-w-6xl mx-auto px-4 py-16 space-y-24">
+        {/* Header */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0, y: -50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex justify-center items-center gap-3 mb-4">
+            <Star className="text-yellow-500" size={32} fill="currentColor" />
+            <Sparkles className="text-orange-500" size={28} />
+            <Gift className="text-rose-500" size={32} />
+          </div>
+          <h1 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-rose-600 to-purple-600 mb-4">
+            Happy Birthday
+          </h1>
+          <h2 className="text-4xl md:text-5xl font-semibold text-amber-800 mb-2">
+            Big Daddy
+          </h2>
+          <div className="flex justify-center gap-2 mt-4">
+            {[...Array(5)].map((_, i) => (
+              <Heart
+                key={i}
+                className="text-rose-500"
+                size={20}
+                fill="currentColor"
+              />
+            ))}
+          </div>
+        </motion.div>
 
-      {/* Main Content */}
-      <div className={styles.mainCard}>
-        {/* Header with animated icon */}
-        <div className={styles.header}>
-          <div className={styles.headerIcon}>
-            <GraduationCap className={styles.headerIconSvg} />
+        {/* Main Image */}
+        <motion.div
+          className="relative max-w-2xl mx-auto"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9 }}
+          viewport={{ once: true }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-rose-400 rounded-3xl blur-2xl opacity-30"></div>
+          <div className="relative bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-amber-200">
+            <img
+              src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Birthday Celebration"
+              className="w-full h-96 object-cover"
+            />
           </div>
-          <h1 className={styles.title}>CONGRATULATIONS!</h1>
-          <div className={styles.sparkleContainer}>
-            <Sparkles className={`${styles.sparkle} ${styles.sparkle1}`} />
-            <Heart className={`${styles.heart} ${styles.heartBounce}`} />
-            <Sparkles className={`${styles.sparkle} ${styles.sparkle2}`} />
-          </div>
-        </div>
+        </motion.div>
 
-        {/* Animated Messages */}
-        <div className={styles.messageContainer}>
-          <p key={currentMessage} className={styles.message}>
-            {congratulatoryMessages[currentMessage]}
-          </p>
-        </div>
-
-        {/* Achievement Stats */}
-        <div className={styles.statsGrid}>
-          <div className={`${styles.statCard} ${styles.statCard1}`}>
-            <div className={styles.statNumber}>100%</div>
-            <div className={styles.statLabel}>Dedication</div>
+        {/* Tribute Message */}
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg p-10 border border-amber-200">
+            <h3 className="text-3xl font-bold text-amber-900 mb-6 text-center">
+              A Tribute to My Hero
+            </h3>
+            <p className="text-lg text-gray-700 leading-relaxed mb-6 text-center">
+              Every chapter of my life has been written with your guidance,
+              every success carries your fingerprints, and every dream I've
+              achieved has been nurtured by your unwavering support.
+            </p>
+            <p className="text-lg text-gray-700 leading-relaxed text-center">
+              You’ve been more than just a father figure—you’ve been my mentor,
+              my pillar of strength, and the architect of the person I am today.
+            </p>
           </div>
-          <div className={`${styles.statCard} ${styles.statCard2}`}>
-            <div className={styles.statNumber}>∞</div>
-            <div className={styles.statLabel}>Possibilities</div>
-          </div>
-          <div className={`${styles.statCard} ${styles.statCard3}`}>
-            <div className={styles.statNumber}>Latest</div>
-            <div className={styles.statLabel}>Nursing Graduate</div>
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className={styles.callToAction}>
-          <p className={styles.ctaText}>
-            Your journey of learning and growth continues!
-          </p>
-          <p className={styles.ctaHighlight}>
-            The world awaits your brilliance, Gratitude! ✨
-          </p>
-        </div>
+        </motion.div>
 
         {/* Celebration Button */}
-        <button
-          className={styles.celebrationButton}
-          onClick={handleCelebrationClick}
+        <motion.div
+          className="flex justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
         >
-          🎉 Celebrate More! 🎉
-        </button>
+          <button
+            onClick={celebrate}
+            className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 text-white px-12 py-6 rounded-full text-2xl font-bold shadow-xl hover:scale-110 active:scale-95 transform transition duration-300"
+          >
+            🎉 Celebrate 🎉
+          </button>
+        </motion.div>
+
+        {/* Photo Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.2 } },
+          }}
+        >
+          {[
+            "https://images.pexels.com/photos/207983/pexels-photo-207983.jpeg?w=400",
+            "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?w=400",
+            "https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?w=400",
+          ].map((src, i) => (
+            <motion.div
+              key={i}
+              className="rounded-2xl overflow-hidden shadow-lg"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <img
+                src={src}
+                alt={`Memory ${i + 1}`}
+                className="w-full h-64 object-cover"
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Closing Message */}
+        <motion.div
+          className="text-center max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-rose-600 mb-4">
+            Wishing you a day filled with joy, laughter, and all the love you’ve
+            given me!
+          </p>
+          <p className="text-lg text-gray-700 font-medium">
+            May this year bring you endless happiness and blessings. You deserve
+            the world and more!
+          </p>
+        </motion.div>
       </div>
     </div>
   );
-};
-
-export default GraduationCelebration;
+}

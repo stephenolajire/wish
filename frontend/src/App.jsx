@@ -1,11 +1,11 @@
 import React from "react";
-import GraduationCelebration from "./components/Greetings";
+import BirthdayTribute from "./components/Greetings";
 
 
 function App () {
   return (
     <>
-      <GraduationCelebration/>
+      <BirthdayTribute/>
     </>
   )
 }
